@@ -28,3 +28,31 @@ def cek_usia():
         usia = tahun_sekarang - tahun_lahir
         return render_template('cek_usia.html', nama=nama, usia=usia)
     return render_template('cek_usia.html', nama=None, usia=None)
+
+# route untuk menghitung index massa tubuh
+@app.route("/imt", methods=['GET', 'POST'])
+def cek_imt():
+    if request.method == 'POST':
+        # ambil data dari form
+        nama = request.form.get('nama')
+        tinggi = float(request.form.get('tinggi')) / 100 # konversi tinggi ke meter
+        berat = float(request.form.get('berat')) # berat dalam kilogram
+        imt = berat / (tinggi * tinggi) # menghitung IMT
+        # menentukan kategori IMT
+        if imt < 17.0:
+            kategori = "Sangat Kurus"
+            img = "skurus.png"
+        elif 17.0 <= imt < 18.4:
+            kategori = "Kurus"
+            img = "kurus.png"
+        elif 18.4 <= imt < 25.0:
+            kategori = "Normal (Ideal)"
+            img = "normal.jpg"
+        elif 25.1 <= imt < 27.0:
+            kategori = "Gemuk"
+            img = "gemuk.jpg"
+        else:
+            kategori = "Obesitas"
+            img = "obesitas.png"
+        return render_template('cek_imt.html', nama=nama, imt=imt, kategori=kategori, img=img)
+    return render_template('cek_imt.html', nama=None, imt=None, kategori=None)
