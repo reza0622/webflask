@@ -1,13 +1,35 @@
 from flask import Flask, render_template, request #harus import Flask dari modul flask, template_rendered untuk memamanggil template html dll, request untuk mengambil data dari form
+from bs4 import BeautifulSoup #import BeautifulSoup dari modul bs4 untuk scraping web berita
+import requests #import requests untuk melakukan request ke web berita
 
 app = Flask(__name__) # inisialisasi objek Flask
+
+# Scraping Web Berita
+def berita():
+    url = "https://www.kompas.com/" # URL yang akan di-scrape
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/114.0.0.0 Safari/537.36"
+    }
+    response = requests.get(url, headers=headers) # melakukan request ke URL dengan headers
+    soup = BeautifulSoup(response.content, 'html.parser')
+    headlines = soup.find_all('h1', class_='hlTitle') # mencari semua elemen h3 dengan class article__title
+    
+    if headlines:
+        hasil = [h.text.strip() for h in headlines]
+        return hasil  # mengembalikan list
+    else:
+        return "Tidak ditemukan headline pada halaman."
+
 
 @app.route("/") # decorator untuk menentukan route
 
 # route ini akan mengembalikan halaman home
 def home():
+    scrape_berita = berita() # panggil fungsi scrape_berita untuk mendapatkan berita
     web_title = "Halaman utama"
-    return render_template('index.html', pesan= web_title) # #menggunakan template_rendered untuk memanggil file index.html yang ada di folder templates
+    return render_template('index.html', pesan= web_title, data=scrape_berita) # #menggunakan template_rendered untuk memanggil file index.html yang ada di folder templates
 
     # return f"<p>Hallo, kamu berada di {web_title}!</p><br> <a href='/about'>About</a>" #gunakan f untuk dapat memanggil variabel dalam string
 
