@@ -4,9 +4,26 @@ import requests #import requests untuk melakukan request ke web berita
 
 app = Flask(__name__) # inisialisasi objek Flask
 
+#filter berita
+def filter_berita(media_berita):
+    nama_elemen = ''  # elemen yang akan dicari
+    nama_class = ''  # class yang akan dicari
+    
+    if media_berita == 'kompas':
+        nama_elemen = 'h1'
+        nama_class = 'hlTitle'
+    elif media_berita == 'tribunNews':
+        nama_elemen = 'div'
+        nama_class = 'hltitle'
+    elif media_berita == 'cnnIndonesia':
+        nama_elemen = 'h2'
+        nama_class = 'text-sm'
+        
+    return [nama_elemen, nama_class]  # mengembalikan elemen dan class yang sesuai dengan media berita
+
 # Scraping Web Berita
-def berita():
-    url = "https://www.kompas.com/" # URL yang akan di-scrape
+def berita(media_berita, url):
+    #url = "https://www.cnnindonesia.com/" # URL yang akan di-scrape
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                       "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -14,7 +31,13 @@ def berita():
     }
     response = requests.get(url, headers=headers) # melakukan request ke URL dengan headers
     soup = BeautifulSoup(response.content, 'html.parser')
-    headlines = soup.find_all('h1', class_='hlTitle') # mencari semua elemen h3 dengan class article__title
+    
+    # filter berita berdasarkan media
+    filter = filter_berita(media_berita)
+    nama_elemen = filter[0]  # elemen yang akan dicari
+    nama_class = filter[1]  # class yang akan dicari
+    
+    headlines = soup.find_all(nama_elemen, nama_class) # mencari semua elemen h3 dengan class article__title
     
     if headlines:
         hasil = [h.text.strip() for h in headlines]
@@ -27,9 +50,11 @@ def berita():
 
 # route ini akan mengembalikan halaman home
 def home():
-    scrape_berita = berita() # panggil fungsi scrape_berita untuk mendapatkan berita
-    web_title = "Halaman utama"
-    return render_template('index.html', pesan= web_title, data=scrape_berita) # #menggunakan template_rendered untuk memanggil file index.html yang ada di folder templates
+    kompas = berita('kompas', "https://www.kompas.com/") # scraping berita dari kompas
+    tribunNews = berita('tribunNews', "https://www.tribunnews.com/") # scraping berita dari tribunNews
+    cnnIndonesia = berita('cnnIndonesia', "https://www.cnnindonesia.com/")
+    web_title = "Dihalaman Berita"
+    return render_template('index.html', pesan= web_title, kompas=kompas, tribunNews=tribunNews, cnnIndonesia=cnnIndonesia) # #menggunakan template_rendered untuk memanggil file index.html yang ada di folder templates
 
     # return f"<p>Hallo, kamu berada di {web_title}!</p><br> <a href='/about'>About</a>" #gunakan f untuk dapat memanggil variabel dalam string
 

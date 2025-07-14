@@ -9,3 +9,12 @@ body {
     color: #336699;
   }
 }
+
+.card {
+  min-height: 500px; /* tinggi default saat awal */
+  transition: all 0.3s ease;
+}
+
+.card.expand {
+  min-height: auto; /* biar bisa membesar saat tombol diklik */
+}

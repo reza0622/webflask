@@ -36,13 +36,68 @@
         </div>
       </nav>
     </header>
-    <h1>Selamat Datang {{pesan}}</h1>
-    <h2>Headline dari Kompas:</h2>
-    <ul>
-      {% for judul in data %}
-      <li>{{ judul }}</li>
-      {% endfor %}
-    </ul>
+
+    <h1 class="text-center mt-4 text-success">Selamat Datang {{pesan}}</h1>
+    <div class="row justify-content-center my-4 mx-5">
+      <div class="col-md-3 d-flex m-3">
+        <div class="card h-100 d-flex flex-column justify-content-between" style="width: 18rem">
+          <img src="./static/img/kompas.png" class="card-img-top" alt="Logo_Kompas" />
+          <div class="card-body">
+            <h5 class="card-title text-center">Berita Kompas</h5>
+          </div>
+          <ul class="list-group list-group-flush list-unstyled berita-list" data-sumber="kompas">
+            {% for judul in kompas %}
+            <li class="list-group-item berita-item berita-kompas" {% if loop.index>3 %} style="display: none;" {% endif %}>{{ judul }}</li>
+            {% endfor %}
+            <li class="list-group-item">
+              <a href="https://www.kompas.com/" class="card-link" target="_blank">Baca Berita Selengkapnya</a>
+            </li>
+          </ul>
+          <div class="card-body text-center">
+            <button class="btn btn-success toggle-btn" data-target="kompas">Lihat Semua</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 d-flex m-3">
+        <div class="card h-100 d-flex flex-column justify-content-between" style="width: 18rem">
+          <img src="./static/img/tribunnews.png" class="card-img-top" alt="Logo_Tribunnews" />
+          <div class="card-body">
+            <h5 class="card-title text-center">Berita Tribunnews</h5>
+          </div>
+          <ul class="list-group list-group-flush list-unstyled berita-list" data-sumber="tribun">
+            {% for judul in tribunNews %}
+            <li class="list-group-item berita-item berita-tribun" {% if loop.index>3 %} style="display: none;" {% endif %}>{{ judul }}</li>
+            {% endfor %}
+            <li class="list-group-item">
+              <a href="https://www.tribunnews.com/" class="card-link" target="_blank">Baca Berita Selengkapnya</a>
+            </li>
+          </ul>
+          <div class="card-body text-center">
+            <button class="btn btn-success toggle-btn" data-target="tribun">Lihat Semua</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 d-flex m-3">
+        <div class="card h-100 d-flex flex-column justify-content-between" style="width: 18rem">
+          <img src="./static/img/cnnindonesia.png" class="card-img-top" alt="Logo_Kompas" />
+          <div class="card-body">
+            <h5 class="card-title text-center">Berita CNN Indonesia</h5>
+          </div>
+          <ul class="list-group list-group-flush list-unstyled berita-list" sumber-berita="cnn">
+            {% for judul in cnnIndonesia %}
+            <li class="list-group-item berita-item berita-cnn" {% if loop.index>3 %} style="display: none;" {% endif %}>{{ judul }}</li>
+            {% endfor %}
+            <li class="list-group-item">
+              <a href="https://www.cnnindonesia.com/" class="card-link" target="_blank">Baca Berita Selengkapnya</a>
+            </li>
+          </ul>
+          <div class="card-body text-center">
+            <button class="btn btn-success toggle-btn" data-target="cnn">Lihat Semua</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </html>
